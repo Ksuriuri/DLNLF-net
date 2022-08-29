@@ -44,74 +44,37 @@ class DLNLF(object):
         # wd_init = tf.truncated_normal_initializer(stddev=0.1)
 
         with tf.variable_scope("classification", reuse=reuse):
-            # W1_1 = tf.get_variable(name='W_conv2d1_1', shape=[3, 3, 1, 64], initializer=w_init)
-            # b1_1 = tf.get_variable(name='b_conv2d1_1', shape=(64), initializer=b_init)
-            # conv1_1 = tf.nn.relu(tf.nn.conv2d(inputs, W1_1, strides=[1, 1, 1, 1], padding='SAME', name='conv1_1') + b1_1)
-            # conv1_1 = tf.nn.max_pool(conv1_1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name='maxpool1_1')
-            #
-            # W2_1 = tf.get_variable(name='W_conv2d2_1', shape=[3, 3, 64, 128], initializer=w_init)
-            # b2_1 = tf.get_variable(name='b_conv2d2_1', shape=(128), initializer=b_init)
-            # conv2_1 = tf.nn.relu(tf.nn.conv2d(conv1_1, W2_1, strides=[1, 1, 1, 1], padding='SAME', name='conv2_1') + b2_1)
-            # conv2_1 = tf.nn.max_pool(conv2_1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name='maxpool2_1')
-            #
-            #
-            # W1_2 = tf.get_variable(name='W_conv2d1_2', shape=[3, 3, 1, 64], initializer=w_init)
-            # b1_2 = tf.get_variable(name='b_conv2d1_2', shape=(64), initializer=b_init)
-            # conv1_2 = tf.nn.relu(tf.nn.conv2d(inputs, W1_2, strides=[1, 1, 1, 1], padding='SAME', name='conv1_2') + b1_2)
-            # conv1_2 = tf.nn.max_pool(conv1_2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name='maxpool1_2')
-            #
-            # W2_2 = tf.get_variable(name='W_conv2d2_2', shape=[3, 3, 64, 128], initializer=w_init)
-            # b2_2 = tf.get_variable(name='b_conv2d2_2', shape=(128), initializer=b_init)
-            # conv2_2 = tf.nn.relu(tf.nn.conv2d(conv1_2, W2_2, strides=[1, 1, 1, 1], padding='SAME', name='conv2_2') + b2_2)
-            # conv2_2 = tf.nn.max_pool(conv2_2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name='maxpool2_2')
-            # print(conv2_2.shape)
-            #
-            # shape1 = conv2_1.get_shape()
-            # shape2 = conv2_2.get_shape()
-            # bcnn1 = tf.reshape(conv2_1, (-1, shape1[1] * shape1[2], shape1[3]))
-            # bcnn2 = tf.reshape(conv2_2, (-1, shape2[1] * shape2[2], shape2[3]))
-            # bilinear = tf.matmul(bcnn1, bcnn2, transpose_a=True)
-            #
-            # assert bilinear.get_shape()[1] == shape1[3]
-            # assert bilinear.get_shape()[2] == shape2[3]
-            # bilinear = tf.reshape(bilinear, (-1, shape1[3] * shape2[3]))
-            # bilinear = tf.divide(bilinear, tf.cast(shape1[1] * shape1[2], tf.float32))
-            # bilinear = tf.multiply(tf.sign(bilinear), tf.sqrt(tf.abs(bilinear) + 1e-12))
-            # bilinear = tf.nn.l2_normalize(bilinear, dim=1)
-            #
-            # # flatten = tf.reshape(conv2_2, shape=[-1, 7 * 7 * 128], name='flatten')
-            # #
-            # Wd1 = tf.get_variable(name='Wd1', shape=(bilinear.get_shape()[-1], 256), initializer=wd_init)
-            # bd1 = tf.get_variable(name='bd1', shape=(256), initializer=b_init)
-            # dense1 = tf.nn.relu(tf.matmul(bilinear, Wd1) + bd1)
-            #
-            # Wd2 = tf.get_variable(name='Wd2', shape=(dense1.get_shape()[-1], 2), initializer=wd_init)
-            # bd2 = tf.get_variable(name='bd2', shape=(2), initializer=b_init)
-            # net_outputs = tf.matmul(dense1, Wd2) + bd2
-
             layers.set_name_reuse(reuse)
 
             map_in = InputLayer(inputs=inputs, name='inputs_1')
             net_1 = Conv2d(net=map_in, n_filter=64, filter_size=(3, 3), strides=(1, 1),
-                         padding='SAME', W_init=w_init, name='small/conv1_1', act=tf.nn.relu)
+                         padding='SAME', W_init=w_init, name='small/conv1_1_1', act=tf.nn.relu)
+            net_1 = Conv2d(net=net_1, n_filter=64, filter_size=(3, 3), strides=(1, 1),
+                         padding='SAME', W_init=w_init, name='small/conv1_1_2', act=tf.nn.relu)
             # net_1 = NonlocalLayer(layer=net_1, depth=32, name='nonlocal1')
             net_1 = DenoiseLayer(layer=net_1, depth=32, name='denoise1_1', act=tf.nn.relu)
             net_1 = MaxPool2d(net_1, name='maxpool1_1')
 
             net_1 = Conv2d(net=net_1, n_filter=128, filter_size=(3, 3), strides=(1, 1),
-                         padding='SAME', W_init=w_init, name='small/conv2_1', act=tf.nn.relu)
+                         padding='SAME', W_init=w_init, name='small/conv2_1_1', act=tf.nn.relu)
+            net_1 = Conv2d(net=net_1, n_filter=128, filter_size=(3, 3), strides=(1, 1),
+                         padding='SAME', W_init=w_init, name='small/conv2_1_2', act=tf.nn.relu)
             # net_1 = NonlocalLayer(layer=net_1, depth=64, name='nonlocal2_1')
             net_1 = DenoiseLayer(layer=net_1, depth=64, name='denoise2_1', act=tf.nn.relu)
             net_outputs_1 = MaxPool2d(net_1, name='maxpool2_1')
 
             net_2 = Conv2d(net=map_in, n_filter=64, filter_size=(3, 3), strides=(1, 1),
-                          padding='SAME', W_init=w_init, name='small/conv1_2', act=tf.nn.relu)
+                          padding='SAME', W_init=w_init, name='small/conv1_2_1', act=tf.nn.relu)
+            net_2 = Conv2d(net=net_2, n_filter=64, filter_size=(3, 3), strides=(1, 1),
+                          padding='SAME', W_init=w_init, name='small/conv1_2_2', act=tf.nn.relu)
             net_2 = NonlocalLayer(layer=net_2, depth=32, name='nonlocal1_2', act=tf.nn.relu)
             # net_2 = DenoiseLayer(layer=net_2, depth=32, name='denoise1_2')
             net_2 = MaxPool2d(net_2, name='maxpool1_2')
 
             net_2 = Conv2d(net=net_2, n_filter=128, filter_size=(3, 3), strides=(1, 1),
-                          padding='SAME', W_init=w_init, name='small/conv2_2', act=tf.nn.relu)
+                          padding='SAME', W_init=w_init, name='small/conv2_2_1', act=tf.nn.relu)
+            net_2 = Conv2d(net=net_2, n_filter=128, filter_size=(3, 3), strides=(1, 1),
+                          padding='SAME', W_init=w_init, name='small/conv2_2_2', act=tf.nn.relu)
             net_2 = NonlocalLayer(layer=net_2, depth=64, name='nonlocal2_2', act=tf.nn.relu)
             # net_2 = DenoiseLayer(layer=net_2, depth=64, name='denoise2_2')
             net_outputs_2 = MaxPool2d(net_2, name='maxpool2_2')
