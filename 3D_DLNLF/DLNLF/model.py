@@ -60,18 +60,24 @@ class DLNLF(object):
             map_in = InputLayer(inputs=inputs, name='inputs')
             net_1 = Conv3dLayer(layer=map_in, shape=[3, 3, 3, 1, 32], strides=[1, 1, 1, 1, 1],
                                 padding='SAME', W_init=w_init, name='small/conv1_1', act=tf.nn.relu, b_init=None)
+            net_1 = Conv3dLayer(layer=net_1, shape=[3, 3, 3, 32, 32], strides=[1, 1, 1, 1, 1],
+                                padding='SAME', W_init=w_init, name='small/conv1_1_1', act=tf.nn.relu, b_init=None)
             net_1 = NonlocalLayer(layer=net_1, depth=16, name='nonlocal1_1')
             # net_1 = DenoiseLayer(layer=net_1, depth=16, name='denoise1_1')
             net_1 = MaxPool3d(net_1, filter_size=2, strides=2, padding='SAME', name='maxpool1_1')
 
             net_1 = Conv3dLayer(layer=net_1, shape=[3, 3, 3, 32, 64], strides=[1, 1, 1, 1, 1],
                                padding='SAME', W_init=w_init, name='small/conv2_1', act=tf.nn.relu, b_init=None)
+            net_1 = Conv3dLayer(layer=net_1, shape=[3, 3, 3, 64, 64], strides=[1, 1, 1, 1, 1],
+                               padding='SAME', W_init=w_init, name='small/conv2_1_1', act=tf.nn.relu, b_init=None)
             net_1 = NonlocalLayer(layer=net_1, depth=32, name='nonlocal2_1')
             # net_1 = DenoiseLayer(layer=net_1, depth=32, name='denoise2_1')
             net_1 = MaxPool3d(net_1, filter_size=2, strides=2, padding='SAME', name='maxpool2_1')
 
             net_1 = Conv3dLayer(layer=net_1, shape=[3, 3, 3, 64, 128], strides=[1, 1, 1, 1, 1],
                                padding='SAME', W_init=w_init, name='small/conv3_1', act=tf.nn.relu, b_init=None)
+            net_1 = Conv3dLayer(layer=net_1, shape=[3, 3, 3, 128, 128], strides=[1, 1, 1, 1, 1],
+                               padding='SAME', W_init=w_init, name='small/conv3_1_1', act=tf.nn.relu, b_init=None)
             net_1 = NonlocalLayer(layer=net_1, depth=64, name='nonlocal3_1')
             # net_1 = DenoiseLayer(layer=net_1, depth=64, name='denoise3_1')
             net_1 = MaxPool3d(net_1, filter_size=2, strides=2, padding='SAME', name='maxpool3_1')
@@ -79,18 +85,24 @@ class DLNLF(object):
 
             net_2 = Conv3dLayer(layer=map_in, shape=[3, 3, 3, 1, 32], strides=[1, 1, 1, 1, 1],
                                 padding='SAME', W_init=w_init, name='small/conv1_2', act=tf.nn.relu, b_init=None)
+            net_2 = Conv3dLayer(layer=net_2, shape=[3, 3, 3, 32, 32], strides=[1, 1, 1, 1, 1],
+                                padding='SAME', W_init=w_init, name='small/conv1_2_1', act=tf.nn.relu, b_init=None)
             # net_2 = NonlocalLayer(layer=net_2, depth=16, name='nonlocal1_2')
             net_2 = DenoiseLayer(layer=net_2, depth=16, name='denoise1_2')
             net_2 = MaxPool3d(net_2, filter_size=2, strides=2, padding='SAME', name='maxpool1_2')
 
             net_2 = Conv3dLayer(layer=net_2, shape=[3, 3, 3, 32, 64], strides=[1, 1, 1, 1, 1],
                                 padding='SAME', W_init=w_init, name='small/conv2_2', act=tf.nn.relu, b_init=None)
+            net_2 = Conv3dLayer(layer=net_2, shape=[3, 3, 3, 64, 64], strides=[1, 1, 1, 1, 1],
+                                padding='SAME', W_init=w_init, name='small/conv2_2_1', act=tf.nn.relu, b_init=None)
             # net_2 = NonlocalLayer(layer=net_2, depth=32, name='nonlocal2_2')
             net_2 = DenoiseLayer(layer=net_2, depth=32, name='denoise2_2')
             net_2 = MaxPool3d(net_2, filter_size=2, strides=2, padding='SAME', name='maxpool2_2')
 
             net_2 = Conv3dLayer(layer=net_2, shape=[3, 3, 3, 64, 128], strides=[1, 1, 1, 1, 1],
                                 padding='SAME', W_init=w_init, name='small/conv3_2', act=tf.nn.relu, b_init=None)
+            net_2 = Conv3dLayer(layer=net_2, shape=[3, 3, 3, 128, 128], strides=[1, 1, 1, 1, 1],
+                                padding='SAME', W_init=w_init, name='small/conv3_2_1', act=tf.nn.relu, b_init=None)
             # net_2 = NonlocalLayer(layer=net_2, depth=64, name='nonlocal3_2')
             net_2 = DenoiseLayer(layer=net_2, depth=64, name='denoise3_2')
             net_2 = MaxPool3d(net_2, filter_size=2, strides=2, padding='SAME', name='maxpool3_2')
